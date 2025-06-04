@@ -1,4 +1,4 @@
-package com.lazymind.java_in_readme_backend.model;
+package com.lazymind.java_in_readme_backend.repo_reader.model;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

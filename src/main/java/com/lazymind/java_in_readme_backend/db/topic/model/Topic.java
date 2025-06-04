@@ -1,4 +1,4 @@
-package com.lazymind.java_in_readme_backend.api.blog.model;
+package com.lazymind.java_in_readme_backend.db.topic.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.Column;
@@ -33,4 +33,8 @@ public class Topic implements Serializable {
     @JsonProperty("folder_name")
     private String folderName;
 
+    @Override
+    public String toString() {
+        return topicName;
+    }
 }

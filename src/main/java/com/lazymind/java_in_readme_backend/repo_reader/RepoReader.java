@@ -11,7 +11,7 @@ public class RepoReader {
     private static final String REPO_OWNER = "abusaeed2433";
     private static final String REPO_NAME = "JavaInREADME";
     private static final String REPO_ACCESS_TOKEN = "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";
-    private static final String REPO_FOLDER = "source";
+    public static final String REPO_FOLDER = "source";
 
     private static final class InstanceHolder {
         private static final RepoReader instance = new RepoReader();

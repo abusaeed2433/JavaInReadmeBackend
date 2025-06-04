@@ -1,6 +1,5 @@
-package com.lazymind.java_in_readme_backend.api.blog.model;
+package com.lazymind.java_in_readme_backend.db.sub_topic.model;
 
-import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

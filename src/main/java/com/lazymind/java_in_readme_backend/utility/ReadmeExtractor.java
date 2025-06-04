@@ -1,7 +1,7 @@
-package com.lazymind.java_in_readme_backend.repo_reader;
+package com.lazymind.java_in_readme_backend.utility;
 
-import com.lazymind.java_in_readme_backend.model.ReadmeContent;
-import com.lazymind.java_in_readme_backend.model.ReadmeContentWrapper;
+import com.lazymind.java_in_readme_backend.repo_reader.model.ReadmeContent;
+import com.lazymind.java_in_readme_backend.repo_reader.model.ReadmeContentWrapper;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 
@@ -19,6 +19,33 @@ public final class ReadmeExtractor {
     }
     private ReadmeExtractor(){}
 
+    public String extractRawText(File file){
+        if(!file.exists()) {
+            log.debug("File not found in extractRawText");
+            return null;
+        }
+
+        final String extension = getExtension(file);
+        if( !"md".equalsIgnoreCase(extension) ) {
+            log.debug("Wrong file provided in extractRawText: {}",extension);
+            return null;
+        }
+
+        final StringBuilder builder = new StringBuilder();
+        try(BufferedReader reader = new BufferedReader(new FileReader(file))){
+
+            String line;
+            while ( (line = reader.readLine()) != null ){
+                builder.append(line);
+            }
+
+            return builder.toString();
+        }catch (IOException e){
+            log.error("Some error occurred at extractRawText: {}",e.getMessage());
+            return null;
+        }
+
+    }
     /**
      *
      * @param filePath path of the readme file
@@ -92,7 +119,7 @@ public final class ReadmeExtractor {
                     break;
                 }
 
-                currentContent.getNestedContents().add( content );
+                currentContent.addContent( content );
             }
         }
 //        if( !builder.isEmpty() ) {

@@ -1,6 +1,7 @@
-package com.lazymind.java_in_readme_backend.api.blog.model;
+package com.lazymind.java_in_readme_backend.db.sub_topic.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.lazymind.java_in_readme_backend.db.topic.model.Topic;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -28,4 +29,8 @@ public class SubTopic implements Serializable {
     @JsonProperty("topic")
     private Topic topic;
 
+    @Override
+    public String toString() {
+        return subTopicName + " in "+topicName;
+    }
 }
