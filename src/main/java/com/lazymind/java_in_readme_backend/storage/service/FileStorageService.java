@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @Slf4j
@@ -23,8 +24,9 @@ public class FileStorageService {
 
     public String saveToFiles(List<Topic> topics, List<SubTopic> subTopics, List<Blog> blogs){
         try {
-            final String strTimestamp = LocalDateTime.now(ZoneId.of("Asia/Dhaka")).toString();
-            final String baseFolder = OUTPUT_FOLDER+"/"+strTimestamp;
+            final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd_HHmmss");
+            final String strTimestamp = LocalDateTime.now(ZoneId.of("Asia/Dhaka")).format(formatter);
+            final String baseFolder = OUTPUT_FOLDER + "/" + strTimestamp;
 
             final File folder = new File(baseFolder);
             if(!folder.exists()){

@@ -5,7 +5,6 @@ import static com.lazymind.java_in_readme_backend.repo_reader.RepoReader.REPO_FO
 import com.lazymind.java_in_readme_backend.db.blog.model.Blog;
 import com.lazymind.java_in_readme_backend.db.sub_topic.model.SubTopic;
 import com.lazymind.java_in_readme_backend.db.topic.model.Topic;
-import com.lazymind.java_in_readme_backend.index.model.TopicWithSubTopic;
 import com.lazymind.java_in_readme_backend.repo_reader.model.Pair;
 import com.lazymind.java_in_readme_backend.repo_reader.model.ReadmeContent;
 import com.lazymind.java_in_readme_backend.repo_reader.model.ReadmeContentWrapper;
@@ -13,6 +12,8 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.io.File;
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Slf4j
 public class DataGenerator {
@@ -60,13 +61,15 @@ public class DataGenerator {
         final List<SubTopic> subTopics = new ArrayList<>();
         final List<Blog> blogList = new ArrayList<>();
 
+        int topicSerial = 0;
         for(String strFolder : folders){
             final File folder = new File(REPO_FOLDER+"/"+strFolder);
 
             final File rootReadme = new File(REPO_FOLDER+"/"+strFolder+"/README.md");
 
             final String topicName = getTopicNameFromFolder(strFolder);
-            final Topic topic = new Topic( topicName, 0, strFolder ); // updated inside
+            final Topic topic = new Topic( topicName, 0, strFolder, topicSerial ); // updated inside
+            topicSerial++;
             topics.add(topic); // reference, no worry when adding
 
             if( rootReadme.exists() ){ // only one part available
@@ -77,10 +80,10 @@ public class DataGenerator {
                 }
 
                 topic.setNoOfSubTopics(1);
-                final SubTopic subTopic = new SubTopic(topicName, topicName, topic);
+                final SubTopic subTopic = new SubTopic(topicName, topicName, topic, 0);
                 subTopics.add(subTopic);
 
-                final TopicWithSubTopic topicWithSubTopic = new TopicWithSubTopic(topic, List.of(subTopic));
+                //final TopicWithSubTopic topicWithSubTopic = new TopicWithSubTopic(topic, List.of(subTopic));
                 //indices.add(topicWithSubTopic);
 
                 final Blog blog = new Blog(subTopic, rawText);
@@ -94,13 +97,21 @@ public class DataGenerator {
                     continue;
                 }
 
-                final TopicWithSubTopic topicWithSubTopic = new TopicWithSubTopic(topic, new ArrayList<>());
+                //final TopicWithSubTopic topicWithSubTopic = new TopicWithSubTopic(topic, new ArrayList<>());
+
+                int serialOutside = folderParts.length + 1;
                 for(File part : folderParts){
                     final String strPartName = part.getName();
 
                     if( !part.isDirectory() || "files".equalsIgnoreCase(strPartName) ) {
                         log.info("Ignoring in multiple sub topic as it is 'files' or directory");
                         continue;
+                    }
+
+                    int subTopicSerial = getSerialFromFolder(strPartName);
+                    if(subTopicSerial == -1) {
+                        serialOutside++;
+                        subTopicSerial = serialOutside;
                     }
 
                     final File partReadme = new File( part,"/README.md" );
@@ -112,7 +123,7 @@ public class DataGenerator {
                     }
 
                     topic.setNoOfSubTopics( topic.getNoOfSubTopics()+1 );
-                    final SubTopic subTopic = new SubTopic(topicName, topicName, topic);
+                    final SubTopic subTopic = new SubTopic(topicName, strPartName, topic, subTopicSerial);
                     subTopics.add(subTopic);
                     //topicWithSubTopic.getSubTopicList().add(subTopic);
 
@@ -128,6 +139,20 @@ public class DataGenerator {
         log.info("Data generation part completed with {} topics {} subtopics and {} blogs", topics.size(), subTopics.size(), blogList.size());
 
         return new Pair<>( new Pair<>(topics, subTopics) , blogList);
+    }
+
+    private int getSerialFromFolder(String folder){
+
+        final String reg = "part\\s*(\\d+)";
+
+        final Matcher matcher = Pattern.compile(reg, Pattern.CASE_INSENSITIVE).matcher(folder);
+
+        if (matcher.find()) {
+            return Integer.parseInt( matcher.group(1) );
+        } else {
+            return -1;
+        }
+
     }
 
     private String getTopicNameFromFolder(String folder){

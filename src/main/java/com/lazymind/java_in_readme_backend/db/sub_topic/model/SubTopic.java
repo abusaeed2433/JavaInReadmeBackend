@@ -29,8 +29,12 @@ public class SubTopic implements Serializable {
     @JsonProperty("topic")
     private Topic topic;
 
+    @Column(name = "serial")
+    @JsonProperty("serial")
+    private Integer serial = 0;
+
     @Override
     public String toString() {
-        return subTopicName + " in "+topicName;
+        return subTopicName + " in "+topicName +": "+serial;
     }
 }

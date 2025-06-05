@@ -10,9 +10,6 @@ import lombok.Setter;
 @RequiredArgsConstructor
 public class SubTopicDTO {
 
-    @JsonProperty("topic_name")
-    private String topicName;
-
     @JsonProperty("sub_topic_name")
-    private String subTopicName;
+    private final String subTopicName;
 }

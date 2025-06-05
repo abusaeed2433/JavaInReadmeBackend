@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 @Getter
 @Setter
@@ -18,7 +19,7 @@ import java.io.Serializable;
 @AllArgsConstructor
 @Entity
 @Table(name = "topic")
-public class Topic implements Serializable {
+public class Topic implements Serializable, Comparable<Topic> {
 
     @Id
     @Column(name = "topic_name")
@@ -33,8 +34,33 @@ public class Topic implements Serializable {
     @JsonProperty("folder_name")
     private String folderName;
 
+    @Column(name = "serial")
+    @JsonProperty("serial")
+    private Integer serial = 0;
+
     @Override
     public String toString() {
         return topicName;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(topicName);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if(this == obj) return true;
+
+        if( !(obj instanceof Topic topic) ) return false;
+
+        return Objects.equals(topicName, topic.topicName) &&
+                Objects.equals(folderName, topic.folderName) &&
+                Objects.equals(noOfSubTopics, topic.noOfSubTopics);
+    }
+
+    @Override
+    public int compareTo(Topic item) {
+        return topicName.compareTo(item.topicName);
     }
 }

@@ -45,8 +45,8 @@ public class SubTopicService {
         }
     }
 
-    public List<SubTopic> readAll(){
-        return repository.findAll();
+    public List<SubTopic> readSerially(){
+        return repository.readSerially();
     }
 
     public String deleteAll(){

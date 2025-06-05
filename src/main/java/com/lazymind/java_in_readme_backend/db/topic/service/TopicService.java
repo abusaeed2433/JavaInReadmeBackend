@@ -45,8 +45,8 @@ public class TopicService {
         }
     }
 
-    public List<Topic> readAll(){
-        return repository.findAll();
+    public List<Topic> readSerially(){
+        return repository.readSerially();
     }
 
     public String deleteAll(){
