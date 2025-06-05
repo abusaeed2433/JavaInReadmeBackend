@@ -24,6 +24,11 @@ jobs:
       - name: Build JAR with Gradle
         run: ./gradlew clean build
 
+      - name: Verify JAR permissions  # NEW STEP TO FIX TAR ERROR
+        run: |
+          chmod 644 build/libs/java_in_readme_backend-0.0.1-SNAPSHOT.jar
+          ls -l build/libs/java_in_readme_backend-0.0.1-SNAPSHOT.jar
+
       - name: List files after build
         run: ls -al build/libs
 
@@ -42,7 +47,10 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: jar-file
-
+      - name: Allow read permission
+        run: |
+          chmod 644 java_in_readme_backend-0.0.1-SNAPSHOT.jar
+          ls -l java_in_readme_backend-0.0.1-SNAPSHOT.jar
       - name: Transfer JAR to VPS
         uses: appleboy/scp-action@v0.1.6
         with:
