@@ -6,9 +6,9 @@ import java.util.TreeMap;
 public class Utility {
 
     /*
-     * @param message message
-     * @param data data of any type of object
-     * @param success true of false
+     * @param message
+     * @param data of any type of object
+     * @param success true of false indicating if read operation success or not
      * @return a TreeMap<String,Object> after setting those values
      */
     public static Map<String, Object> createBasicResponse(String message, Object data, boolean success){

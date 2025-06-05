@@ -19,6 +19,11 @@ public final class ReadmeExtractor {
     }
     private ReadmeExtractor(){}
 
+    /**
+     *
+     * @param file readme file to read from
+     * @return simple read the readme line by line and returns the whole content as String
+     */
     public String extractRawText(File file){
         if(!file.exists()) {
             log.debug("File not found in extractRawText");
@@ -129,13 +134,24 @@ public final class ReadmeExtractor {
         return index;
     }
 
+    /**
+     *
+     * @param line String to count hash at first
+     * @return number of # present at the start of the line
+     */
     private int countHashAtStart(String line){
+        line = line.trim();
         int index = 0;
         while (index < line.length() && line.charAt(index) == '#') index++;
 
         return index;
     }
 
+    /**
+     *
+     * @param file to read extension from
+     * @return the simple extension of the file. Content after the last dot
+     */
     private String getExtension(File file){
         final String fileName = file.getName();
         int i = fileName.lastIndexOf('.');

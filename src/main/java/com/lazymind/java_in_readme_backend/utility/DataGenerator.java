@@ -19,6 +19,32 @@ import java.util.regex.Pattern;
 public class DataGenerator {
     private static final String INDEX_KEY = "Topic Orders";
 
+    private static final Map<String,String> folderValueMap = new TreeMap<>();
+    static {
+        folderValueMap.put("datatype", "Data type");
+        folderValueMap.put("operator", "Operator");
+        folderValueMap.put("classesandobject", "Class & Object");
+
+        folderValueMap.put("theobjectclass", "The Object class");
+        folderValueMap.put("wrapper_class", "Wrapper class");
+        folderValueMap.put("exceptionhandling", "Exception Handling");
+
+        folderValueMap.put("assertion", "Assertion");
+        folderValueMap.put("string", "String");
+        folderValueMap.put("datetime", "Date-Time");
+
+        folderValueMap.put("formatter", "Basic formatting");
+        folderValueMap.put("regex", "Regex");
+        folderValueMap.put("array", "Array");
+
+        folderValueMap.put("inheritance", "Inheritance");
+        folderValueMap.put("interfaces", "Interface");
+        folderValueMap.put("enum", "Enum");
+
+        folderValueMap.put("java17", "What's New in java17");
+        folderValueMap.put("qna", "Common Questions");
+    }
+
     private static final class InstanceHolder{
         private static final DataGenerator instance = new DataGenerator();
     }
@@ -27,6 +53,10 @@ public class DataGenerator {
         return InstanceHolder.instance;
     }
 
+    /**
+     * Read from local already downloaded repo, and extract topics, subtopics, blogs.
+     * @return Return Pair( Pair(topics, subtopics), blogs)
+     */
     public Pair<Pair<List<Topic>,List<SubTopic>>, List<Blog>> generateData(){
         final ReadmeContentWrapper wrapper = ReadmeExtractor.getInstance().extract(REPO_FOLDER+"/README.md");
 
@@ -141,8 +171,12 @@ public class DataGenerator {
         return new Pair<>( new Pair<>(topics, subTopics) , blogList);
     }
 
+    /**
+     *
+     * @param folder name of the folder of the format `part<number>`
+     * @return part number if found else -1
+     */
     private int getSerialFromFolder(String folder){
-
         final String reg = "part\\s*(\\d+)";
 
         final Matcher matcher = Pattern.compile(reg, Pattern.CASE_INSENSITIVE).matcher(folder);
@@ -155,7 +189,14 @@ public class DataGenerator {
 
     }
 
+    /**
+     *
+     * @param folder name of the folder
+     * @return the corresponding key in map or the folder name itself if key not found
+     */
     private String getTopicNameFromFolder(String folder){
+        if( folderValueMap.containsKey(folder) ) return folderValueMap.get(folder);
+
         return folder;
     }
 

@@ -1,6 +1,7 @@
 package com.lazymind.java_in_readme_backend.db.sub_topic.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.lazymind.java_in_readme_backend.db.blog.model.BlogPK;
 import com.lazymind.java_in_readme_backend.db.topic.model.Topic;
 import jakarta.persistence.*;
 import lombok.*;
@@ -13,7 +14,7 @@ import java.io.Serializable;
 @AllArgsConstructor
 @Entity
 @Table(name = "subtopic")
-@IdClass(SubTopicPK.class)
+@IdClass(BlogPK.class)
 public class SubTopic implements Serializable {
 
     @Id

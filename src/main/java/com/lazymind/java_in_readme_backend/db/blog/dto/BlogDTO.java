@@ -11,12 +11,12 @@ import lombok.Setter;
 public class BlogDTO {
 
     @JsonProperty("topic_name")
-    private String topicName;
+    private final String topicName;
 
     @JsonProperty("sub_topic_name")
-    private String subTopicName;
+    private final String subTopicName;
 
     @JsonProperty("content")
-    private String content;
+    private final String content;
 
 }

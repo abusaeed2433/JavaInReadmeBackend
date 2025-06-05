@@ -28,8 +28,16 @@ public class PeriodicScheduler {
     private final SubTopicService subTopicService;
     private final FileStorageService storageService;
 
-    @Scheduled(cron = "0 32 20 * * ?") // at 8:32PM every day
+    /**
+     * Runs every day at 8:32PM and does the following
+     * Update the codebase using git
+     * Extract content(topics, subtopics, blogs) from data
+     * Backup current table data as json
+     * Delete current table data
+     * Insert newly extracted data
+     */
 //    @Scheduled(cron = "0 */1 * * * ?") // at every 5 minutes
+    @Scheduled(cron = "0 32 20 * * ?") // at 8:32PM every day
     public void processRepo(){
         log.info("Started processRepo function at: {}", LocalDateTime.now());
 

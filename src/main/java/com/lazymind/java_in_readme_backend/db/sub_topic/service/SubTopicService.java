@@ -1,5 +1,6 @@
 package com.lazymind.java_in_readme_backend.db.sub_topic.service;
 
+import com.lazymind.java_in_readme_backend.db.blog.model.BlogPK;
 import com.lazymind.java_in_readme_backend.db.sub_topic.model.SubTopic;
 import com.lazymind.java_in_readme_backend.db.sub_topic.repository.SubTopicRepository;
 import lombok.RequiredArgsConstructor;
@@ -47,6 +48,11 @@ public class SubTopicService {
 
     public List<SubTopic> readSerially(){
         return repository.readSerially();
+    }
+
+    public SubTopic findBySubTopic(String topicName, String subTopicName){
+        final BlogPK blogPK = new BlogPK(topicName, subTopicName);
+        return repository.findById(blogPK).orElse(null);
     }
 
     public String deleteAll(){
