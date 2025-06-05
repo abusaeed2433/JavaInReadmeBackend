@@ -10,6 +10,8 @@ import org.springframework.stereotype.Service;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.List;
 
 @Slf4j
@@ -21,16 +23,17 @@ public class FileStorageService {
 
     public String saveToFiles(List<Topic> topics, List<SubTopic> subTopics, List<Blog> blogs){
         try {
-            final long timestamp = System.currentTimeMillis();
+            final String strTimestamp = LocalDateTime.now(ZoneId.of("Asia/Dhaka")).toString();
+            final String baseFolder = OUTPUT_FOLDER+"/"+strTimestamp;
 
-            final File folder = new File(OUTPUT_FOLDER);
+            final File folder = new File(baseFolder);
             if(!folder.exists()){
                 Files.createDirectories(folder.toPath());
             }
 
-            saveTopics(topics, OUTPUT_FOLDER+"/topic_"+timestamp+".json");
-            saveSubTopics(subTopics, OUTPUT_FOLDER+"/sub_topic_"+timestamp+".json");
-            saveBlogs(blogs, OUTPUT_FOLDER+"/blog_"+timestamp+".json");
+            saveTopics(topics, baseFolder+"/topic_"+strTimestamp+".json");
+            saveSubTopics(subTopics, baseFolder+"/sub_topic_"+strTimestamp+".json");
+            saveBlogs(blogs, baseFolder+"/blog_"+strTimestamp+".json");
             return null;
         }catch (IOException e){
             log.debug("Failed to save topics: {}", e.getMessage());
