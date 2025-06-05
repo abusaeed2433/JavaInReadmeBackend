@@ -5,6 +5,8 @@ import java.util.TreeMap;
 
 public class Utility {
 
+    public static final long TWO_FETCH_MIN_INTERVAL = 60*60*1000L;
+
     /*
      * @param message
      * @param data of any type of object
@@ -17,6 +19,18 @@ public class Utility {
         responseMap.put("data", data);
         responseMap.put("success", success);
         return responseMap;
+    }
+
+    /**
+     *
+     * @param timestamp time difference between current time and last refresh time
+     * @return the remaining amount to wait before making next call in minute
+     */
+    public static int findMinAfterCallCanBeMade(long timestamp){
+        long remaining = TWO_FETCH_MIN_INTERVAL - timestamp;
+        if(remaining <= 0) return 0;
+
+        return (int)(remaining / (60*1000L));
     }
 
 }

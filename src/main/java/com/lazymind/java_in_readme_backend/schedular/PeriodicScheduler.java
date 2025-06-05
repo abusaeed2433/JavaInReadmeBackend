@@ -2,6 +2,8 @@ package com.lazymind.java_in_readme_backend.schedular;
 
 import com.lazymind.java_in_readme_backend.db.blog.model.Blog;
 import com.lazymind.java_in_readme_backend.db.blog.service.BlogService;
+import com.lazymind.java_in_readme_backend.db.last_fetched.model.LastFetched;
+import com.lazymind.java_in_readme_backend.db.last_fetched.service.LastFetchedService;
 import com.lazymind.java_in_readme_backend.db.sub_topic.model.SubTopic;
 import com.lazymind.java_in_readme_backend.db.sub_topic.service.SubTopicService;
 import com.lazymind.java_in_readme_backend.db.topic.model.Topic;
@@ -16,6 +18,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.List;
 
 @Slf4j
@@ -27,6 +30,7 @@ public class PeriodicScheduler {
     private final TopicService topicService;
     private final SubTopicService subTopicService;
     private final FileStorageService storageService;
+    private final LastFetchedService lastFetchedService;
 
     /**
      * Runs every day at 8:32PM and does the following
@@ -109,6 +113,14 @@ public class PeriodicScheduler {
             }
         }
         log.info("Saved all data");
+
+        final long timestamp = System.currentTimeMillis();
+        final LastFetched lastFetched = LastFetched.builder()
+                .timestamp(timestamp)
+                .formattedTimestamp(LocalDateTime.now(ZoneId.of("Asia/Dhaka")).toString())
+                .build();
+
+        lastFetchedService.save(lastFetched);
         log.info("Ended processRepo function");
     }
 

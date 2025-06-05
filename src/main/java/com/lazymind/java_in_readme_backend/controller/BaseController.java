@@ -4,6 +4,8 @@ import com.lazymind.java_in_readme_backend.db.blog.dto.BlogDTO;
 import com.lazymind.java_in_readme_backend.db.blog.model.Blog;
 import com.lazymind.java_in_readme_backend.db.blog.model.BlogPK;
 import com.lazymind.java_in_readme_backend.db.blog.service.BlogService;
+import com.lazymind.java_in_readme_backend.db.last_fetched.model.LastFetched;
+import com.lazymind.java_in_readme_backend.db.last_fetched.service.LastFetchedService;
 import com.lazymind.java_in_readme_backend.db.sub_topic.dto.SubTopicDTO;
 import com.lazymind.java_in_readme_backend.db.sub_topic.model.SubTopic;
 import com.lazymind.java_in_readme_backend.db.sub_topic.service.SubTopicService;
@@ -35,13 +37,29 @@ public class BaseController {
     private final TopicService topicService;
     private final SubTopicService subTopicService;
     private final BlogService blogService;
+    private final LastFetchedService lastFetchedService;
     private final PeriodicScheduler periodicScheduler;
 
-    @GetMapping(value = "/force_refresh")
-    public ResponseEntity<Map<String,Object>> forceRefresh(
-            @RequestParam(defaultValue = "0", value = "password") String password){
 
-        final Map<String,Object> responseMap = Utility.createBasicResponse("Not implemented yet", null, false);
+    @GetMapping(value = "/force_refresh")
+    public ResponseEntity<Map<String,Object>> forceRefresh(){
+
+        final Map<String,Object> responseMap;
+
+        final long currentTime = System.currentTimeMillis();
+
+        final LastFetched lastFetched = lastFetchedService.getLastOne();
+        if(lastFetched != null){
+            final long dif = (currentTime - lastFetched.getTimestamp());
+            if( dif < Utility.TWO_FETCH_MIN_INTERVAL ){ // can't make so many call
+                final int minAfterCanCall = Utility.findMinAfterCallCanBeMade(dif);
+                responseMap = Utility.createBasicResponse("Can be called after "+minAfterCanCall+" minutes", null, false);
+                return ResponseEntity.badRequest().body(responseMap);
+            }
+        }
+
+        periodicScheduler.processRepo();
+        responseMap = Utility.createBasicResponse("Fetched function execution completed", null, true);
         return ResponseEntity.badRequest().body(responseMap);
     }
 
