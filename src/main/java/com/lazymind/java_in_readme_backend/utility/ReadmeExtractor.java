@@ -41,7 +41,7 @@ public final class ReadmeExtractor {
 
             String line;
             while ( (line = reader.readLine()) != null ){
-                builder.append(line);
+                builder.append(line).append('\n');
             }
 
             return builder.toString();
