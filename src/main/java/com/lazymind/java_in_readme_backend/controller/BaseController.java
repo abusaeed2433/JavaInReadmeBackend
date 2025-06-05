@@ -11,6 +11,7 @@ import com.lazymind.java_in_readme_backend.db.topic.model.Topic;
 import com.lazymind.java_in_readme_backend.db.topic.service.TopicService;
 import com.lazymind.java_in_readme_backend.index.model.TopicWithSubTopic;
 import com.lazymind.java_in_readme_backend.schedular.PeriodicScheduler;
+import com.lazymind.java_in_readme_backend.utility.DataGenerator;
 import com.lazymind.java_in_readme_backend.utility.Utility;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -72,6 +73,7 @@ public class BaseController {
             @RequestParam (name = "topic_name") String topicName,
             @RequestParam(name = "sub_topic_name") String subTopicName ){
 
+        topicName = DataGenerator.getInstance().getTopicNameFromFolder(topicName);
         final Map<String,Object> responseMap;
 
         //final SubTopic subTopic = subTopicService.findBySubTopic(topicName, subTopicName);

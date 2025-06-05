@@ -68,9 +68,9 @@ public class PeriodicScheduler {
 
         log.info("Deleting old data");
         {
-            String error = topicService.deleteAll();
+            String error = blogService.deleteAll();
             if(error != null){
-                log.debug("Failed to delete from topic service with: {}", error);
+                log.debug("Failed to delete from blog service with: {}", error);
             }
         }
         {
@@ -79,11 +79,10 @@ public class PeriodicScheduler {
                 log.debug("Failed to delete from sub topic service with: {}", error);
             }
         }
-
         {
-            String error = blogService.deleteAll();
+            String error = topicService.deleteAll();
             if(error != null){
-                log.debug("Failed to delete from blog service with: {}", error);
+                log.debug("Failed to delete from topic service with: {}", error);
             }
         }
 

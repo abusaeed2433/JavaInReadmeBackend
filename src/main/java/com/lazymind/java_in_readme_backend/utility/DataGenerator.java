@@ -19,7 +19,7 @@ import java.util.regex.Pattern;
 public class DataGenerator {
     private static final String INDEX_KEY = "Topic Orders";
 
-    private static final Map<String,String> folderValueMap = new TreeMap<>();
+    public static final Map<String,String> folderValueMap = new TreeMap<>();
     static {
         folderValueMap.put("datatype", "Data type");
         folderValueMap.put("operator", "Operator");
@@ -165,7 +165,6 @@ public class DataGenerator {
             }
         }
 
-
         log.info("Data generation part completed with {} topics {} subtopics and {} blogs", topics.size(), subTopics.size(), blogList.size());
 
         return new Pair<>( new Pair<>(topics, subTopics) , blogList);
@@ -194,7 +193,7 @@ public class DataGenerator {
      * @param folder name of the folder
      * @return the corresponding key in map or the folder name itself if key not found
      */
-    private String getTopicNameFromFolder(String folder){
+    public String getTopicNameFromFolder(String folder){
         if( folderValueMap.containsKey(folder) ) return folderValueMap.get(folder);
 
         return folder;
