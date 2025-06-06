@@ -24,7 +24,7 @@ public final class ReadmeExtractor {
      * @param file readme file to read from
      * @return simple read the readme line by line and returns the whole content as String
      */
-    public String extractRawText(File file){
+    public String extractRawTextExceptBottomLink(File file){
         if(!file.exists()) {
             log.debug("File not found in extractRawText");
             return null;
@@ -41,7 +41,14 @@ public final class ReadmeExtractor {
 
             String line;
             while ( (line = reader.readLine()) != null ){
-                builder.append(line).append('\n');
+
+                if( "<!-- bottom_nav_bar_1243 -->".equalsIgnoreCase(line.trim()) ){ // continue until next one is found
+                    while ( (line = reader.readLine()) != null && !("<!-- bottom_nav_bar_1243 -->".equalsIgnoreCase(line) )){}
+                    line = reader.readLine();
+                }
+                if(line != null) {
+                    builder.append(line).append('\n');
+                }
             }
 
             return builder.toString();

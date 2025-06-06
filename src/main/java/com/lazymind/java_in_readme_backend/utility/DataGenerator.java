@@ -103,7 +103,7 @@ public class DataGenerator {
             topics.add(topic); // reference, no worry when adding
 
             if( rootReadme.exists() ){ // only one part available
-                final String rawText = ReadmeExtractor.getInstance().extractRawText(rootReadme);
+                final String rawText = ReadmeExtractor.getInstance().extractRawTextExceptBottomLink(rootReadme);
                 if(rawText == null) {
                     log.debug("Failed to extract content from readme: {}",rootReadme.getName());
                     continue;
@@ -146,7 +146,7 @@ public class DataGenerator {
 
                     final File partReadme = new File( part,"/README.md" );
 
-                    final String rawText = ReadmeExtractor.getInstance().extractRawText(partReadme);
+                    final String rawText = ReadmeExtractor.getInstance().extractRawTextExceptBottomLink(partReadme);
                     if(rawText == null) {
                         log.debug("Failed to extract content from multiple part at readme: {}",partReadme.getName());
                         continue;
