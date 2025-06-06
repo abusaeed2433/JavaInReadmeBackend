@@ -49,6 +49,8 @@ public class PeriodicScheduler {
     public void processRepo(){
         log.info("Started processRepo function at: {}", LocalDateTime.now());
 
+        updateRepoAndContributors();
+
         log.info("Updating codebase");
         boolean isCodebaseUpdated = RepoReader.getInstance().updateCodebase(githubToken);
         log.info("Code base updated: {}", isCodebaseUpdated);
@@ -126,6 +128,11 @@ public class PeriodicScheduler {
 
         lastFetchedService.save(lastFetched);
         log.info("Ended processRepo function");
+
+    }
+
+    private void updateRepoAndContributors(){
+
     }
 
 }
