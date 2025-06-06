@@ -14,6 +14,7 @@ import com.lazymind.java_in_readme_backend.storage.service.FileStorageService;
 import com.lazymind.java_in_readme_backend.utility.DataGenerator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
@@ -25,6 +26,9 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class PeriodicScheduler {
+
+    @Value("${github.access_token:NOT_SET}")
+    private String githubToken;
 
     private final BlogService blogService;
     private final TopicService topicService;
@@ -46,7 +50,7 @@ public class PeriodicScheduler {
         log.info("Started processRepo function at: {}", LocalDateTime.now());
 
         log.info("Updating codebase");
-        boolean isCodebaseUpdated = RepoReader.getInstance().updateCodebase();
+        boolean isCodebaseUpdated = RepoReader.getInstance().updateCodebase(githubToken);
         log.info("Code base updated: {}", isCodebaseUpdated);
 
         final Pair<Pair<List<Topic>, List<SubTopic>>, List<Blog>> topicsSubTopicsBlogs = DataGenerator.getInstance().generateData();

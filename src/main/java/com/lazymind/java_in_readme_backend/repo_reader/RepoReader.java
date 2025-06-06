@@ -10,7 +10,6 @@ public class RepoReader {
 
     private static final String REPO_OWNER = "abusaeed2433";
     private static final String REPO_NAME = "JavaInREADME";
-    private static final String REPO_ACCESS_TOKEN = "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";
     public static final String REPO_FOLDER = "source";
 
     private static final class InstanceHolder {
@@ -21,7 +20,7 @@ public class RepoReader {
         return InstanceHolder.instance;
     }
 
-    public boolean updateCodebase(){
+    public boolean updateCodebase(String accessToken){
 
         final File file = new File(REPO_FOLDER);
 
@@ -29,7 +28,7 @@ public class RepoReader {
             return pullRepo(file);
         }
 
-        return cloneRepo();
+        return cloneRepo(accessToken);
     }
 
     private boolean pullRepo(File destination){
@@ -38,8 +37,8 @@ public class RepoReader {
         return runProcess(builder);
     }
 
-    private boolean cloneRepo(){
-        final String repoUrl = "https://" + REPO_ACCESS_TOKEN+ "@github.com/" + REPO_OWNER + "/" + REPO_NAME;
+    private boolean cloneRepo(String accessToken){
+        final String repoUrl = "https://" + accessToken + "@github.com/" + REPO_OWNER + "/" + REPO_NAME;
         ProcessBuilder builder = new ProcessBuilder("git", "clone", repoUrl, REPO_FOLDER);
         return runProcess(builder);
     }

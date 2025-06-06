@@ -16,6 +16,7 @@ import com.lazymind.java_in_readme_backend.schedular.PeriodicScheduler;
 import com.lazymind.java_in_readme_backend.utility.DataGenerator;
 import com.lazymind.java_in_readme_backend.utility.Utility;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -34,17 +35,37 @@ import java.util.TreeMap;
 @Validated
 public class BaseController {
 
+    @Value("${github.access_token:NOT_SET}")
+    private String githubToken;
+
     private final TopicService topicService;
     private final SubTopicService subTopicService;
     private final BlogService blogService;
     private final LastFetchedService lastFetchedService;
     private final PeriodicScheduler periodicScheduler;
 
+    @GetMapping(value = "/read_github_access_token")
+    public ResponseEntity<Map<String, Object>> readGithubAccessToken(){
+
+        final Map<String,Object> responseMap;
+
+        if( "NOT_SET".equalsIgnoreCase(githubToken) ){
+            responseMap = Utility.createBasicResponse("Token not found", githubToken, false);
+            return ResponseEntity.badRequest().body(responseMap);
+        }
+
+        responseMap = Utility.createBasicResponse("Read successful", githubToken, true);
+        return ResponseEntity.ok(responseMap);
+    }
 
     @GetMapping(value = "/force_refresh")
     public ResponseEntity<Map<String,Object>> forceRefresh(){
-
         final Map<String,Object> responseMap;
+
+        if( "NOT_SET".equalsIgnoreCase(githubToken) ){
+            responseMap = Utility.createBasicResponse("Token not found in server", null, false);
+            return ResponseEntity.badRequest().body(responseMap);
+        }
 
         final long currentTime = System.currentTimeMillis();
 
