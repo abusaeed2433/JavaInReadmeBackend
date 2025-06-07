@@ -31,10 +31,13 @@ dependencies {
 	annotationProcessor("org.projectlombok:lombok")
 
 	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
-	implementation("org.json:json:20210307")
+	implementation("org.json:json:20231013")
 
 	implementation("org.flywaydb:flyway-core:10.8.1")
 	implementation("org.flywaydb:flyway-mysql:10.8.1")
+
+	// For api calls
+	implementation("org.springframework.boot:spring-boot-starter-webflux")
 
 //	implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.3.0")
 }

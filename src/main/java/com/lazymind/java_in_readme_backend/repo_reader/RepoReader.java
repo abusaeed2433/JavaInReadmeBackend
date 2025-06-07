@@ -8,7 +8,7 @@ import java.io.IOException;
 @Slf4j
 public class RepoReader {
 
-    private static final String REPO_OWNER = "abusaeed2433";
+    public static final String REPO_OWNER = "abusaeed2433";
     private static final String REPO_NAME = "JavaInREADME";
     public static final String REPO_FOLDER = "source";
 
