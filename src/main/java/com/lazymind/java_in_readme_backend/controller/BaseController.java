@@ -4,8 +4,13 @@ import com.lazymind.java_in_readme_backend.db.blog.dto.BlogDTO;
 import com.lazymind.java_in_readme_backend.db.blog.model.Blog;
 import com.lazymind.java_in_readme_backend.db.blog.model.BlogPK;
 import com.lazymind.java_in_readme_backend.db.blog.service.BlogService;
+import com.lazymind.java_in_readme_backend.db.contribution.dto.ContributionDTO;
+import com.lazymind.java_in_readme_backend.db.contribution.service.ContributionService;
 import com.lazymind.java_in_readme_backend.db.last_fetched.model.LastFetched;
 import com.lazymind.java_in_readme_backend.db.last_fetched.service.LastFetchedService;
+import com.lazymind.java_in_readme_backend.db.repo.dto.MyRepoDTO;
+import com.lazymind.java_in_readme_backend.db.repo.model.MyRepo;
+import com.lazymind.java_in_readme_backend.db.repo.service.MyRepoService;
 import com.lazymind.java_in_readme_backend.db.sub_topic.dto.SubTopicDTO;
 import com.lazymind.java_in_readme_backend.db.sub_topic.model.SubTopic;
 import com.lazymind.java_in_readme_backend.db.sub_topic.service.SubTopicService;
@@ -42,7 +47,27 @@ public class BaseController {
     private final SubTopicService subTopicService;
     private final BlogService blogService;
     private final LastFetchedService lastFetchedService;
+    private final MyRepoService myRepoService;
+    private final ContributionService contributionService;
+
     private final PeriodicScheduler periodicScheduler;
+
+    @GetMapping(value = "/read_contributions")
+    public ResponseEntity<Map<String,Object>> reaContributions(){
+
+        final List<MyRepo> myRepoList = myRepoService.readSerially();
+
+        final List<MyRepoDTO> myRepoDTOList = new ArrayList<>();
+
+        for(MyRepo repo : myRepoList){
+            final List<ContributionDTO> contributionList = contributionService.readSeriallyByRepoName(repo.getName());
+
+            myRepoDTOList.add( new MyRepoDTO(repo.getName(), repo.getDescription(), repo.getUrl(), contributionList) );
+        }
+
+        Map<String,Object> responseMap = Utility.createBasicResponse("Read successful", myRepoDTOList, true);
+        return ResponseEntity.ok(responseMap);
+    }
 
     @GetMapping(value = "/read_github_access_token")
     public ResponseEntity<Map<String, Object>> readGithubAccessToken(){

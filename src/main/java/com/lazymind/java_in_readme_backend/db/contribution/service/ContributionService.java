@@ -1,5 +1,6 @@
 package com.lazymind.java_in_readme_backend.db.contribution.service;
 
+import com.lazymind.java_in_readme_backend.db.contribution.dto.ContributionDTO;
 import com.lazymind.java_in_readme_backend.db.contribution.model.Contribution;
 import com.lazymind.java_in_readme_backend.db.contribution.repository.ContributionRepository;
 import lombok.RequiredArgsConstructor;
@@ -35,8 +36,8 @@ public class ContributionService {
         }
     }
 
-    public List<Contribution> readSeriallyByRepoName(String repoName){
-        return repository.findByRepoNameSortedByScore(repoName);
+    public List<ContributionDTO> readSeriallyByRepoName(String repoName){
+        return repository.findAllAsDTO(repoName);
     }
 
     public String deleteAll(){
